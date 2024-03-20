@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, Menu, messagebox, font, simpledialog
-import requests
-import os
+import subprocess
 
 filename = None
 
@@ -59,6 +58,18 @@ def change_font_family(family):
     text_font_family = family
     text.config(font=(text_font_family, text_font_size))
 
+def execute_python_code():
+    code = text.get('1.0', tk.END)
+    try:
+        result = subprocess.run(['python', '-c', code], capture_output=True, text=True)
+        if result.returncode == 0:
+            output = result.stdout
+            messagebox.showinfo("Python Output", output)
+        else:
+            error = result.stderr
+            messagebox.showerror("Python Error", error)
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 def confirm_quit():
     if messagebox.askyesno("Quit", "Do you want to save before quitting?"):
@@ -106,6 +117,11 @@ font_family_menu = Menu(fontmenu, tearoff=0)
 fontmenu.add_cascade(label="Font Family", menu=font_family_menu)
 for family in font_families:
     font_family_menu.add_command(label=family, command=lambda f=family: change_font_family(f))
+
+# Create a Python menu
+pythonmenu = Menu(menubar, tearoff=0)
+menubar.add_cascade(label="Python", menu=pythonmenu)
+pythonmenu.add_command(label="Execute Python Code", command=execute_python_code)
 
 # Bind closing event to confirm_quit function
 root.protocol("WM_DELETE_WINDOW", confirm_quit)
