@@ -12,23 +12,8 @@ Create new text files.
 Open existing text files.
 Save changes to text files.
 Customize font family and size.
-Choose between a blackish or white background.
-Getting Started
-Clone the repository to your local machine:
 
-bash
-Copy code
-git clone https://github.com/your-username/textEditor.git
-Navigate to the project directory:
 
-bash
-Copy code
-cd textEditor
-Run the Python script:
-
-bash
-Copy code
-python textEditor.py
 Usage
 File Menu: Use the File menu to create new files, open existing files, and save changes.
 
@@ -42,6 +27,4 @@ Tkinter (Python GUI Library)
 Contributing
 Contributions are welcome! Please feel free to fork the repository and submit pull requests to suggest improvements or additional features.
 
-License
-This project is licensed under the MIT License.
 
