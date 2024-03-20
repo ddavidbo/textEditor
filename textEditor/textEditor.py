@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog, Menu, messagebox, font, simpledialog
+from tkinter import filedialog, Menu, messagebox, font, simpledialog, scrolledtext
 import subprocess
+import os
 
 filename = None
 
@@ -64,12 +65,19 @@ def execute_python_code():
         result = subprocess.run(['python', '-c', code], capture_output=True, text=True)
         if result.returncode == 0:
             output = result.stdout
-            messagebox.showinfo("Python Output", output)
+            output_text.config(state='normal')
+            output_text.delete(1.0, tk.END)
+            output_text.insert(tk.END, output)
+            output_text.config(state='disabled')
+            output_window.deiconify()
         else:
             error = result.stderr
             messagebox.showerror("Python Error", error)
     except Exception as e:
         messagebox.showerror("Error", str(e))
+
+def close_output_window():
+    output_window.withdraw()
 
 def confirm_quit():
     if messagebox.askyesno("Quit", "Do you want to save before quitting?"):
@@ -118,13 +126,25 @@ fontmenu.add_cascade(label="Font Family", menu=font_family_menu)
 for family in font_families:
     font_family_menu.add_command(label=family, command=lambda f=family: change_font_family(f))
 
-# Create a Python menu
-pythonmenu = Menu(menubar, tearoff=0)
-menubar.add_cascade(label="Python", menu=pythonmenu)
-pythonmenu.add_command(label="Execute Python Code", command=execute_python_code)
+# Create a Compiler menu
+compiler_menu = Menu(menubar, tearoff=0)
+menubar.add_cascade(label="Compile", menu=compiler_menu)
 
-# Bind closing event to confirm_quit function
-root.protocol("WM_DELETE_WINDOW", confirm_quit)
+# Add commands to the Compiler menu for executing Python and Java code
+compiler_menu.add_command(label="Run Python Code", command=execute_python_code)
+
+# Create output window
+output_window = tk.Toplevel(root)
+output_window.title("Output")
+output_window.withdraw()  # Hide initially
+
+# Create output text widget
+output_text = scrolledtext.ScrolledText(output_window, wrap=tk.WORD)
+output_text.pack(expand=True, fill='both')
+
+# Close button for output window
+close_button = tk.Button(output_window, text="Close", command=close_output_window)
+close_button.pack()
 
 # Start the tkinter event loop
 root.mainloop()
