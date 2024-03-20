@@ -12,7 +12,7 @@ Create new text files.
 Open existing text files.
 Save changes to text files.
 Customize font family and size.
-
+Python Compiler
 
 Usage
 File Menu: Use the File menu to create new files, open existing files, and save changes.
